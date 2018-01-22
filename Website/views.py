@@ -154,8 +154,8 @@ def done(request):
     OmbdInfo = MovieApi.titleSearchOmbd(Movie["title"])
     Pic = request.session.get("Pic")
     Pic = OmbdInfo.get("Poster", "None")
-    if Pic == None:
-        Pic ="static 'no_poster.png'"
+    if Pic == "None":
+        Pic ="https://i.imgur.com/85WKJwD.png"
     request.session["Pic"] = Pic
 
     return render(request, 'done.html')
@@ -168,25 +168,24 @@ def Done(request):
     request.session["Movie"] = Movie
     OmbdInfo = MovieApi.titleSearchOmbd(Movie["title"])
     Pic = request.session.get("Pic")
-    Pic = OmbdInfo.get("Poster")
-    if Pic == None:
-        Pic = "static 'no_poster.png'"
-
+    Pic = OmbdInfo.get("Poster", "None")
+    if Pic == "None":
+        Pic ="https://i.imgur.com/85WKJwD.png"
     request.session["Pic"] = Pic
     Web  = request.session.get("Web")
     Web = OmbdInfo.get("Website", "Sorry no Website")
     request.session["Web"] = Web
 
     return render(request,'done.html')
+
 def Alldone(request):
     Movie = {"nothing ": "nothing"}
     Movie = request.session.get("Movie")
     OmbdInfo = MovieApi.titleSearchOmbd(Movie['title'])
     Pic = request.session.get("Pic")
-    Pic = OmbdInfo.get("Poster")
-    if Pic == None:
-        Pic = "static 'no_poster.png'"
-
+    Pic = OmbdInfo.get("Poster", "None")
+    if Pic == "None":
+        Pic ="https://i.imgur.com/85WKJwD.png"
     request.session["Pic"] = Pic
     Web  = request.session.get("Web")
     Web = OmbdInfo.get("Website", "No Website, sorry")
