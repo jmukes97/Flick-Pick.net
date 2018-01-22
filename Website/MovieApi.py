@@ -1,0 +1,154 @@
+#!/usr/bin/python3
+
+import http.client
+import json
+import random
+#jon remember that most movies are returned as dictionaries
+#and dont fucking touch the dependency functions, they work fine
+
+def titleSearchOmbd(title): #call this to search for movies on omdb this is helpful for posters
+	cleanTitle = title.replace(" ", "+")
+	conn = http.client.HTTPSConnection("www.omdbapi.com")
+	conn.request("GET", "/?apikey=fc093ec7&t=" + cleanTitle)
+	result = conn.getresponse()
+	data = result.read(2000).decode('utf-8')
+	data = json.loads(data)
+	return data
+
+def getActorId(name): #gets the actors id. this shouldnt ever be called by you but i guess it can
+	conn = http.client.HTTPSConnection('api.themoviedb.org')
+	conn.request('GET','/3/search/person?api_key=b8f980fec80a185afde3725a298c7f61&query=' + name.replace(" ", "+"))
+	data = conn.getresponse().read(10000000).decode('utf-8')
+	return json.loads(data)["results"][0]["id"]
+	
+
+def actorCrossRefrence(n1, n2, n3): #imput 3 actors get a random movie reccomendation
+	arrayOfIds = [getActorId(n1), getActorId(n2), getActorId(n3)]
+	cleanStrIds = str(arrayOfIds)[1:-1].replace(" ", "")
+	PageAndData =crossRefHelp(cleanStrIds, 1)
+	start = PageAndData[0]
+	NeedsToBeRandomized = ["nothing"] * start        
+	while start > 0:
+            PageAndData =crossRefHelp(cleanStrIds, start)
+            start = start - 1
+            NeedsToBeRandomized[(PageAndData[0] - start) - 1] = PageAndData
+	MovieRecomendation = RandomizeCrossRef(NeedsToBeRandomized)
+	print(MovieRecomendation["title"] + " is the movie you should be watching! Here's what its about. "+ MovieRecomendation["overview"]) 
+	return MovieRecomendation
+	
+	
+def crossRefHelp(CleanString, PageNum): #this is a dependancy please dont touch
+	conn = http.client.HTTPSConnection("api.themoviedb.org")
+	page = str(PageNum)
+	conn.request("GET", "/3/discover/movie?api_key=b8f980fec80a185afde3725a298c7f61&page="+ page +"&with_people=" + CleanString + "&sort_by=vote_average.desc")
+	result = conn.getresponse()
+	data = result.read(10000000).decode('utf-8')
+	NumOfPages = json.loads(data)["total_pages"]
+	data = json.loads(data)["results"]#is the array of movie results
+	info = NumOfPages, data
+	return info
+
+def RandomizeCrossRef(ArrayOfTupleOfArrayofDict):#this is a dependancy please dont touch
+    breakout1 = ArrayOfTupleOfArrayofDict[random.randint(0,len(ArrayOfTupleOfArrayofDict) - 1)][1]
+    MovieDict = breakout1[random.randint(0, len(breakout1) -1)]
+    return MovieDict
+
+def reallyPopular(): #grabs a really popular random movie
+    conn = http.client.HTTPSConnection("api.themoviedb.org")
+    conn.request("GET", "/3/discover/movie?api_key=b8f980fec80a185afde3725a298c7f61&sort_by=popularity.desc")
+    result = conn.getresponse()
+    data = result.read(10000000).decode('utf-8')
+    #for more options make NumOfPages larger. THIS WILL SLOW DOWN THE PROGRAM THOUGH
+    NumOfPages = 2
+    data = json.loads(data)["results"]
+    info = NumOfPages, data
+    NeedsToBeRandomized = ["nothing"] * NumOfPages
+    while NumOfPages > 0:
+        info = popularHelp(NumOfPages)
+        NeedsToBeRandomized[(NumOfPages) - 1] = info
+        NumOfPages = NumOfPages -1
+        
+    print(randomizePopular(NeedsToBeRandomized))
+    
+def popularHelp(PageNum): #this is a dependancy please dont touch
+	conn = http.client.HTTPSConnection("api.themoviedb.org")
+	page = str(PageNum).encode('utf-8')
+	conn.request("GET", "/3/discover/movie?api_key=b8f980fec80a185afde3725a298c7f61&page="+ page +"&sort_by=popularity.desc")
+	result = conn.getresponse()
+	data = result.read(10000000).decode('utf-8')
+	data = json.loads(data)["results"]#is the array of movie results
+	info = data
+	return info
+    
+def randomizePopular(data): #this is a dependancy please dont touch
+    breakarr = data[random.randint(0, 4)]
+    return breakarr[random.randint(0,len(breakarr) - 1)]
+
+def MovieByRating(rating): #gives a random movie based on a rating
+    conn = http.client.HTTPSConnection("api.themoviedb.org")
+    conn.request("GET", "/3/discover/movie?api_key=b8f980fec80a185afde3725a298c7f61&certification_country=US&certification="+ rating +"&sort_by=vote_average.desc")
+    result = conn.getresponse()
+    data = result.read(10000000).decode('utf-8')
+    data = json.loads(data)["results"]#is the array of movie results
+    #for more options make NumOfPages larger. THIS WILL SLOW DOWN THE PROGRAM THOUGH
+    NumOfPages = 5    
+    info = NumOfPages, data
+    NeedsToBeRandomized = ["nothing"] * NumOfPages
+    while NumOfPages > 0:
+        info = ratingHelp(NumOfPages, rating)
+        NeedsToBeRandomized[(NumOfPages) - 1] = info
+        NumOfPages = NumOfPages -1
+    return randomizePopular(NeedsToBeRandomized)
+        
+def ratingHelp(PageNum, rating): #this is a dependancy please dont touch
+	conn = http.client.HTTPSConnection("api.themoviedb.org")
+	page = str(PageNum)
+	conn.request("GET", "/3/discover/movie?api_key=b8f980fec80a185afde3725a298c7f61&certification_country=US&certification="+ rating +"&page="+ page +"&sort_by=vote_average.desc")
+	result = conn.getresponse()
+	data = result.read(10000000).decode('utf-8')
+	data = json.loads(data)["results"]#is the array of movie results
+	info = data
+	return info
+
+ 
+    
+def getGenresId(): #gets the genre id. this shouldnt ever be called by you but i guess it can
+	conn = http.client.HTTPSConnection('api.themoviedb.org')
+	conn.request('GET','/3/genre/movie/list?api_key=b8f980fec80a185afde3725a298c7f61&language=en-US')
+	data = conn.getresponse().read(10000000).decode('utf-8')
+	data = json.loads(data)["genres"]
+	choice = ["nothing"] * 3
+	choice[0] = data[random.randint(0, len(data) -1)]
+	choice[1] = data[random.randint(0, len(data) -1)]
+	while choice[0] == choice[1]:
+            choice[1] = data[random.randint(0, len(data) -1)]
+	choice[2] = data[random.randint(0, len(data) -1)]
+	while choice[2] == choice[0] or choice[2] == choice[1]:
+            choice[2] = data[random.randint(0, len(data) -1)]
+	return choice
+    
+def randomizeGenre(choice):#
+    GenrePick = choice[random.randint(0, len(choice) -1)]
+    id = str(GenrePick["id"])
+    conn = http.client.HTTPSConnection('api.themoviedb.org')
+    conn.request('GET','/3/genre/'+ id + '/movies?api_key=b8f980fec80a185afde3725a298c7f61&language=en-US&sort_by=popularity.desc')
+    data = conn.getresponse().read(100000).decode('utf-8')
+    data = json.loads(data)["results"]
+    data = data[random.randint(0, len(data) - 1)]
+    return data
+ 
+def ActorChoice():# should put up one random actor for the user to choose
+    page = str(random.randint(1, 10))
+    conn = http.client.HTTPSConnection('api.themoviedb.org')
+    conn.request('GET','/3/person/popular?api_key=b8f980fec80a185afde3725a298c7f61&language=en-US&page=' + page)
+    data = conn.getresponse().read(10000000).decode('utf-8')
+    data = json.loads(data)["results"]
+    data = data[random.randint(0, len(data) - 1)]
+    return data
+    
+
+    
+    
+    
+    
+    

@@ -1,0 +1,44 @@
+<html>
+{% load static %}
+    <header>
+        <link href="{% static 'main.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600" rel="stylesheet">
+        <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <title>F L I C K P I C K</title>
+        <style>
+            
+        </style>
+    </header>
+
+        
+        <div id="background">
+            <img src="{% static 'background.png' %}"/>
+        </div>
+
+        <div id="logo">
+            <img class=" animated fadeInDown" src="{% static 'logo-10.png'  %}"/>
+        </div>
+<a href="/Genre">
+        <div id="mainbuttons">
+            <div class="Genre animated fadeInUp">
+            <div class="menuword1"> Genre</div>
+            </div>
+        </a>
+<a href="/Content-Rating/">
+
+          <div class="rating animated fadeInUp">
+            <div class="menuword2"> Content Rating</div>
+            </div>    
+</a>
+<a href="/Actors/">
+            
+              <div class="actor animated fadeInUp">
+            <div class="menuword1"> Actor</div>
+            </div>
+</a>            
+        </div>
+        
+        
+        
+    </body>
+</html>

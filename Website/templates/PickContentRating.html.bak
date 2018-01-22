@@ -1,0 +1,54 @@
+<html>
+{% load static %}
+    <header>
+        <link href="{% static 'main.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600" rel="stylesheet">
+        <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <title>FLICKPICK</title>
+        <style>
+            .buttons{    
+                /*border:yellow 2px solid;*/
+                position: relative;
+                height:10vw;
+                width: 100%;
+                left:0vw;
+                overflow: hidden;
+                top:18vw;
+                padding-top:2%;
+                padding-bottom: 15%;
+            }
+            
+            .choiceword{
+                font-size:3vw;
+            }
+
+        </style>
+    </header>
+    <body>
+        <div id="background">
+            <img src="{% static 'background.png' %}"/>
+        </div>
+        <div class="buttons">
+           <a href="/G-rating">
+            <div class="choice1 animated fadeInUp">
+            <div class="choiceword"> G </div>
+           </a>
+            </div>
+        <a href="/PG-Rating">
+          <div class="choice2 animated fadeInUp">
+            <div class="choiceword"> PG </div>
+            </div>    
+         </a>
+                <a href="/PG-13">           
+              <div class="choice3 animated fadeInUp">
+                <div class="choiceword"> PG 13</div>
+            </div>
+          </a>
+     <a href="/R-rating">        
+            <div class="choice4 animated fadeInUp">
+                <div class="choiceword"> R</div>
+            </div>
+</a>
+        </div>
+    </body>
+</html>

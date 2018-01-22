@@ -1,0 +1,33 @@
+<html>
+{% load static %}
+    <header>
+        <link href="{% static 'main.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600" rel="stylesheet">
+        <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <title>FLICKPICK</title>
+        <style>
+        </style>
+    </header>
+    <body>
+        <div id="background">
+            <img src="{% static 'background.png' %}"/>
+        </div>
+        <div class="buttons">
+<a href="/LoadActors0"> 
+            <div class="choice1 animated fadeInUp">
+            <div class="choiceword"> {{ request.session.bridge.0.name }}  </div>
+            </div>
+        </a>
+<a href="/LoadActors1"> 
+          <div class="choice2 animated fadeInUp">
+            <div class="choiceword"> {{ request.session.bridge.1.name }} </div>
+            </div>    
+        </a>
+<a href="/LoadActors2">
+            <div class="choice3 animated fadeInUp">
+            <div class="choiceword"> {{ request.session.bridge.2.name }}  </div>
+            </div>
+        </a>
+        </div>
+    </body>
+</html>

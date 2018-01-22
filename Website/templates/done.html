@@ -1,0 +1,109 @@
+<html>
+{% load static %}
+<header>
+    <link href="{% static 'main.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600" rel="stylesheet">
+    <title>F L I C K P I C K</title>
+    <style>
+        #poster{
+            /*border:red 2px solid;*/
+            height:45vw;
+            width:auto;
+            top:5vw;
+            position:absolute;
+            left:7vw;
+        }
+        
+        #poster img{
+            height:45vw;
+        }
+        
+        #texts{
+            /*border:yellow 2px solid;*/
+            height:44vw;
+            top:5.5vw;
+            position: relative;
+            width:50vw;
+            left: 40vw;
+            
+        }
+        
+        #title{
+            font-weight:600;
+            text-align: center;
+            font-size:3vw;
+           /* border:2px purple solid;*/
+            top:1.5vw;
+            position:relative;
+        }
+        #bio{
+            /*border:red 2px solid;*/
+            width:50vw;
+            height:20vw;
+            position:relative;
+            font-size:1.5vw;
+            overflow: AUTO;
+            top:3vw;
+            
+            
+            
+            
+        }
+        
+        #links{
+            height:7vw;
+            position:relative;
+           /* border:2px blue solid;*/
+            top:6vw;
+            width:50vw;
+            font-size:1.5vw;
+            word-wrap:break-word;
+        }
+        
+        .startover img{
+           /* border:blue 2px solid;*/
+            width:20vw;
+            
+        }
+        
+        .startover{
+            z-index:111;
+            position:relative;
+            /*border:red 2px solid;*/
+            width:20vw;
+            left:75vw;
+            top:2vw;
+        }
+    </style>
+    
+</header>
+<body>
+    <div id="container">
+        <div id="background">
+            <img src="{% static 'background.png' %}"/>
+        </div>
+        <div id="poster">
+            <img src="{{ request.session.Pic }}" />
+        </div>
+        
+        <div id="texts">
+            <div id="title">
+                {{ request.session.Movie.title }}
+            </div>
+
+            <div id="bio">
+               <!-- Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonumLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero 
+-->          {{ request.session.Movie.overview }}           
+ </div>
+
+            <div id="links">
+                <br> <a href="{{ request.session.Web }}"> {{ request.session.Web }} </a>
+
+            </div>
+        </div>
+        <div class="startover">
+            <a href="/"> <img src="{% static 'startover-12.png' %}"/></a>
+        </div>
+    </div>
+</body>
+</html>
